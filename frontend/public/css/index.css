@@ -33,6 +33,24 @@ body {
 .hero p {
     font-size: 18px;
     color: #555;
+    margin-bottom: 25px;
+}
+
+.welcome-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.welcome-box,
+.welcome-content .welcome-gif {
+    display: block;
+    max-width: 320px;
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* ===== FOOTER ===== */
