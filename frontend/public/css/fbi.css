@@ -1,15 +1,42 @@
 /* Stili specifici per la scheda FBI; gli stili di base sono in weather.css. */
 .fbi-wrapper {
     padding: 24px 16px;
+    background-image:
+        linear-gradient(rgba(7, 18, 35, 0.62), rgba(7, 18, 35, 0.72)),
+        url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkzfEqtYcCCcKpeS-ebv-UDWu-vEZl0Fc7OyLPsUNPqg&s=10");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .fbi-box {
     width: min(760px, 100%);
+    background: rgba(235, 243, 251, 0.94);
+    backdrop-filter: blur(6px);
+}
+
+.fbi-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.fbi-emblem {
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border: 3px solid #d5ad31;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .fbi-box h1 {
-    margin-bottom: 12px;
-    color: #333;
+    margin: 0;
+    color: #18395d;
 }
 
 .fbi-image {
@@ -30,4 +57,21 @@
     display: inline-block;
     margin-top: 12px;
     color: #154f91;
+}
+
+@media (max-width: 420px) {
+    .fbi-heading {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .fbi-emblem {
+        flex-basis: 52px;
+        width: 52px;
+        height: 52px;
+    }
+
+    .fbi-box h1 {
+        font-size: 1.35rem;
+    }
 }
