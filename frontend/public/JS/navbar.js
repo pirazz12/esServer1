@@ -19,16 +19,23 @@ async function loadNavbar() {
         if (user.authenticated) {
             authArea.replaceChildren(); //quando autenticato toglie il contenuto "Login with google"
             console.log("Utente autenticato:", user.firstName);
-            // textContent (NON innerHTML): il nome arriva da Google ed è dato esterno,
-            // con innerHTML sarebbe una possibile XSS
+
+            const brand = document.querySelector(".nav-logo");
             const hello = document.createElement("span");
-            hello.textContent = `Ciao ${user.firstName} `; //carico il welcome
+            hello.className = "nav-welcome";
+            hello.textContent = `Ciao ${user.firstName}`; //carico il welcome
+
+            if (brand) {
+                const existingWelcome = brand.querySelector(".nav-welcome");
+                if (existingWelcome) existingWelcome.remove();
+                brand.append(" ", hello);
+            }
 
             const logout = document.createElement("a");//carico il link logout
             logout.href = "/api/v1/auth/logout";
             logout.textContent = "Logout";
 
-            authArea.append(hello, logout);
+            authArea.append(logout);
         }
         // se non autenticato resta il link "Login With Google" già presente
     } catch (err) {
