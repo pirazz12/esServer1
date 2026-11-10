@@ -18,12 +18,12 @@ async function loadNavbar() {
 
         if (user.authenticated) {
             authArea.replaceChildren(); //quando autenticato toglie il contenuto "Login with google"
-            console.log("Utente autenticato:", user.firstName);
+            console.log("Utente autenticato:", user.firstName || user.displayName);
 
             const brand = document.querySelector(".nav-logo");
             const hello = document.createElement("span");
             hello.className = "nav-welcome";
-            hello.textContent = `Ciao ${user.firstName}`; //carico il welcome
+            hello.textContent = `Ciao, ${user.firstName || user.displayName || "utente"}`; //carico il welcome
 
             if (brand) {
                 const existingWelcome = brand.querySelector(".nav-welcome");

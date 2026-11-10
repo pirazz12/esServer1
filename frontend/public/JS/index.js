@@ -5,9 +5,13 @@ async function loadWelcomeGif() {
     return;
   }
 
-  const renderGif = () => {
+  const renderGif = (userName = "amico") => {
     const box = document.createElement("div");
     box.className = "welcome-box";
+
+    const title = document.createElement("div");
+    title.className = "welcome-title";
+    title.textContent = `Benvenuto, ${userName}`;
 
     const img = document.createElement("img");
     img.src = "https://media1.tenor.com/m/51BTuWL-8gIAAAAd/belly-dance.gif";
@@ -16,6 +20,7 @@ async function loadWelcomeGif() {
     img.loading = "eager";
     img.decoding = "async";
 
+    box.appendChild(title);
     box.appendChild(img);
     welcomeContent.innerHTML = "";
     welcomeContent.appendChild(box);
@@ -28,7 +33,7 @@ async function loadWelcomeGif() {
       const user = await response.json();
 
       if (user && user.authenticated) {
-        renderGif();
+        renderGif(user.firstName || user.displayName || "utente");
         return;
       }
     }
