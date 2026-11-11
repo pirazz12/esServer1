@@ -1,0 +1,17 @@
+{
+  "name": "data-service",
+  "version": "1.0.0",
+  "description": "Microservizio per la restituzione di dati JSON",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^18.0.8",
+    "express": "^5.2.1"
+  }
+}
+

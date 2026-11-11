@@ -12,13 +12,17 @@ async function loadNavbar() {
     try {
         const response = await fetch("/api/v1/auth/me");//endpoint standard google
 
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        if (!response.ok) {
+            window.dispatchEvent(new CustomEvent("auth-state-change", { detail: null }));
+            throw new Error(`HTTP ${response.status}`);
+        }
 
         const user = await response.json();
 
         if (user.authenticated) {
             authArea.replaceChildren(); //quando autenticato toglie il contenuto "Login with google"
             console.log("Utente autenticato:", user.firstName || user.displayName);
+            window.dispatchEvent(new CustomEvent("auth-state-change", { detail: user }));
 
             const brand = document.querySelector(".nav-logo");
             const hello = document.createElement("span");
@@ -36,10 +40,13 @@ async function loadNavbar() {
             logout.textContent = "Logout";
 
             authArea.append(logout);
+        } else {
+            window.dispatchEvent(new CustomEvent("auth-state-change", { detail: null }));
         }
         // se non autenticato resta il link "Login With Google" già presente
     } catch (err) {
         // auth-service giù: la navbar resta in stato "non loggato"
+        window.dispatchEvent(new CustomEvent("auth-state-change", { detail: null }));
         console.error("Impossibile verificare l'autenticazione:", err);
     }
 }
