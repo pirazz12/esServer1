@@ -7,13 +7,27 @@ const app = express();
 const config = require('../config/env');
 
 dotenv.config();
+
+// Schema e modello di prova
+const TestSchema = new mongoose.Schema({
+  messaggio: String,
+  data: { type: Date, default: Date.now }
+});
+const TestModel = mongoose.model("Test", TestSchema);
+
+// Connessione al database e salvataggio del dato di prova
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Connesso a MongoDB Atlas");
+    return TestModel.create({ messaggio: "Prova dal mio progetto!" });
+  })
+  .then((doc) => {
+    console.log("Dato salvato su Atlas:", doc);
   })
   .catch((err) => {
     console.error("Errore connessione DB:", err);
   });
+//
 
 const paths = require('../config/paths');
 const googleAuthRoutes = require(paths.ROUTES + '/authRoutes');
