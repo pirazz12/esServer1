@@ -1,7 +1,15 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const passport = require('../../config/passport');
 const config = require('../../config/env');
+
+const TestSchema = new mongoose.Schema({
+  messaggio: String,
+  data: { type: Date, default: Date.now }
+});
+const TestModel = mongoose.models.Test || mongoose.model('Test', TestSchema);
+
 router.get(
   "/google",
   passport.authenticate("google", {
@@ -33,6 +41,23 @@ router.get('/me', (req, res) => {
     authenticated: true,
     firstName: req.user.firstName,
   });
+});
+
+router.get('/db-status', async (req, res) => {
+  try {
+    const data = await TestModel.find().sort({ data: -1 }).lean();
+    res.json({
+      connected: true,
+      count: data.length,
+      data
+    });
+  } catch (error) {
+    res.status(500).json({
+      connected: false,
+      error: error.message,
+      data: []
+    });
+  }
 });
 
 router.get('/logout', (req, res) => {
