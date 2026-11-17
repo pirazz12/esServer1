@@ -12,24 +12,6 @@ async function loadMongoData() {
     const mongoBox = document.createElement("div");
     mongoBox.className = "mongo-box";
 
-    const title = document.createElement("h3");
-    title.textContent = "Dati dal database MongoDB";
-
-    const list = document.createElement("ul");
-    list.className = "mongo-list";
-
-    if (!result || !Array.isArray(result.data) || result.data.length === 0) {
-      const emptyItem = document.createElement("li");
-      emptyItem.textContent = "Nessun dato trovato";
-      list.appendChild(emptyItem);
-    } else {
-      result.data.forEach((item) => {
-        const li = document.createElement("li");
-        li.textContent = item.messaggio || "Dato vuoto";
-        list.appendChild(li);
-      });
-    }
-
     const jsonButton = document.createElement("button");
     jsonButton.type = "button";
     jsonButton.className = "show-json-button mongo-button";
@@ -50,8 +32,6 @@ async function loadMongoData() {
       jsonButton.textContent = jsonPanel.hidden ? "Mostra JSON" : "Nascondi JSON";
     });
 
-    mongoBox.appendChild(title);
-    mongoBox.appendChild(list);
     mongoBox.appendChild(jsonButton);
     mongoBox.appendChild(jsonPanel);
     welcomeContent.appendChild(mongoBox);
