@@ -16,5 +16,9 @@ timeout /t 2 /nobreak >nul
 
 start "Gateway" /D "%~dp0backend\gateway" cmd /k "npm install && node src\gateway.js"
 
+timeout /t 2 /nobreak >nul
+
+start "Data Service" /D "%~dp0backend\dataService" cmd /k "npm install && npm start"
+
 echo Le finestre dei tre server sono state aperte.
 endlocal

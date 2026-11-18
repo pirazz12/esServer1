@@ -1,14 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const router = express.Router();
 const passport = require('../../config/passport');
 const config = require('../../config/env');
-
-const TestSchema = new mongoose.Schema({
-  messaggio: String,
-  data: { type: Date, default: Date.now }
-});
-const TestModel = mongoose.models.Test || mongoose.model('Test', TestSchema);
 
 router.get(
   "/google",
@@ -40,29 +33,13 @@ router.get('/me', (req, res) => {
   res.json({
     authenticated: true,
     firstName: req.user.firstName,
+    displayName: req.user.displayName
   });
-});
-
-router.get('/db-status', async (req, res) => {
-  try {
-    const data = await TestModel.find().sort({ data: -1 }).lean();
-    res.json({
-      connected: true,
-      count: data.length,
-      data
-    });
-  } catch (error) {
-    res.status(500).json({
-      connected: false,
-      error: error.message,
-      data: []
-    });
-  }
 });
 
 router.get('/logout', (req, res) => {
   req.logout((err) => {
-    if (err) return next(err);
+    if (err) return res.status(500).json({ error: err.message });
     req.session.destroy(() => {
       res.clearCookie('connect.sid');
       res.redirect(config.FRONTEND_URL);

@@ -16,4 +16,8 @@ router.get('/weather', (req, res) => {
     res.sendFile(path.join(paths.PUBLIC, 'weather.html'));
 });
 
+router.get('/database', (req, res) => {
+    res.sendFile(path.join(paths.PUBLIC, 'database.html'));
+});
+
 module.exports = router;

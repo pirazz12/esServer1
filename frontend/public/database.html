@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database</title>
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/database.css">
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <script src="JS/navbar.js"></script>
+
+    <main class="database-page">
+        <section class="database-card">
+            <h1>Database MongoDB</h1>
+            <p class="database-description">Scrivi un messaggio e salvalo nella raccolta MongoDB.</p>
+
+            <div id="database-login-message" class="database-login-message" hidden>
+                Effettua il login con Google per usare il database.
+            </div>
+
+            <form id="database-form" class="database-form" hidden>
+                <label for="database-message">Messaggio da salvare</label>
+                <textarea id="database-message" name="text" maxlength="1000" required
+                    placeholder="Scrivi qualcosa..."></textarea>
+                <button type="submit">Salva su MongoDB</button>
+                <p id="database-status" class="database-status" aria-live="polite"></p>
+            </form>
+
+            <section class="database-results">
+                <h2>Messaggi salvati</h2>
+                <div id="database-messages" aria-live="polite">Caricamento...</div>
+            </section>
+
+            <button id="database-json-button" class="database-json-button" type="button" hidden>
+                Mostra stato database
+            </button>
+            <pre id="database-json" class="database-json" hidden></pre>
+        </section>
+    </main>
+
+    <div id="footer"></div>
+    <script src="JS/footer.js"></script>
+    <script src="JS/database.js"></script>
+</body>
+
+</html>

@@ -21,7 +21,13 @@ app.use("/api/v1/auth", createProxyMiddleware({
     }
 }));
 
-
+app.use("/api/v1/data", createProxyMiddleware({
+    target: config.DATA_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: {
+        "^/api/v1/data": "/api/data"
+    }
+}));
 
 app.use("/api/v1", createProxyMiddleware({
     target: config.SERVER_URL,

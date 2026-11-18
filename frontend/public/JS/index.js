@@ -1,65 +1,27 @@
-async function loadMongoData() {
-  const welcomeContent = document.getElementById("welcome-content");
+const DEFAULT_WELCOME_GIF_URL = "https://media1.tenor.com/m/5ot5ADGxJdAAAAAd/hello.gif";
+let welcomeGifUrl = DEFAULT_WELCOME_GIF_URL;
 
-  if (!welcomeContent) {
-    return;
-  }
-
+async function loadWelcomeGifSetting() {
   try {
-    const response = await fetch("/api/v1/auth/db-status");
-    const result = await response.json();
-
-    const mongoBox = document.createElement("div");
-    mongoBox.className = "mongo-box";
-
-    const jsonButton = document.createElement("button");
-    jsonButton.type = "button";
-    jsonButton.className = "show-json-button mongo-button";
-    jsonButton.textContent = "Mostra JSON";
-
-    const jsonPanel = document.createElement("pre");
-    jsonPanel.className = "json-panel mongo-json";
-    jsonPanel.hidden = true;
-    jsonPanel.setAttribute("aria-live", "polite");
-
-    jsonButton.addEventListener("click", () => {
-      const output = Array.isArray(result?.data)
-        ? result.data.map(item => item.messaggio || "Dato vuoto")
-        : [];
-
-      jsonPanel.textContent = JSON.stringify(output, null, 2);
-      jsonPanel.hidden = !jsonPanel.hidden;
-      jsonButton.textContent = jsonPanel.hidden ? "Mostra JSON" : "Nascondi JSON";
-    });
-
-    mongoBox.appendChild(jsonButton);
-    mongoBox.appendChild(jsonPanel);
-    welcomeContent.appendChild(mongoBox);
+    const response = await fetch("/api/v1/auth/app-settings");
+    if (response.ok) {
+      const settings = await response.json();
+      if (typeof settings.welcomeGifUrl === "string" && settings.welcomeGifUrl) {
+        welcomeGifUrl = settings.welcomeGifUrl;
+      }
+    }
   } catch (error) {
-    console.error("Errore durante il caricamento dei dati MongoDB:", error);
+    console.error("Errore durante il caricamento delle impostazioni:", error);
   }
 }
 
 async function loadWelcomeGif() {
+  await loadWelcomeGifSetting();
   const welcomeContent = document.getElementById("welcome-content");
 
   if (!welcomeContent) {
     return;
   }
-
-  const sampleJson = {
-    status: "ok",
-    message: "Login completato con successo",
-    user: {
-      name: "Mario Rossi",
-      role: "admin",
-      authenticated: true
-    },
-    meta: {
-      timestamp: new Date().toISOString(),
-      environment: "development"
-    }
-  };
 
   const hideWelcome = () => {
     welcomeContent.innerHTML = "";
@@ -76,8 +38,8 @@ async function loadWelcomeGif() {
     title.textContent = `Benvenuto, ${userName}`;
 
     const img = document.createElement("img");
-    img.src = "https://media1.tenor.com/m/51BTuWL-8gIAAAAd/belly-dance.gif";
-    img.alt = "Welcome Gif";
+    img.src = welcomeGifUrl;
+    img.alt = "Hello Gif";
     img.className = "welcome-gif";
     img.loading = "eager";
     img.decoding = "async";
@@ -91,10 +53,16 @@ async function loadWelcomeGif() {
     jsonPanel.id = "json-panel";
     jsonPanel.className = "json-panel";
     jsonPanel.hidden = true;
-    jsonPanel.setAttribute("aria-live", "polite");
 
     button.addEventListener("click", () => {
-      jsonPanel.textContent = JSON.stringify(sampleJson, null, 2);
+      jsonPanel.textContent = JSON.stringify({
+        status: "ok",
+        message: "Login completato con successo",
+        user: {
+          name: userName,
+          authenticated: true
+        }
+      }, null, 2);
       jsonPanel.hidden = false;
     });
 
@@ -117,7 +85,6 @@ async function loadWelcomeGif() {
 
     if (user && user.authenticated) {
       renderGif(user.firstName || user.displayName || "utente");
-      await loadMongoData();
       return;
     }
 
@@ -148,8 +115,8 @@ window.addEventListener("auth-state-change", (event) => {
     title.textContent = `Benvenuto, ${name}`;
 
     const img = document.createElement("img");
-    img.src = "https://media1.tenor.com/m/51BTuWL-8gIAAAAd/belly-dance.gif";
-    img.alt = "Welcome Gif";
+    img.src = welcomeGifUrl;
+    img.alt = "Hello Gif";
     img.className = "welcome-gif";
 
     const button = document.createElement("button");
@@ -158,16 +125,16 @@ window.addEventListener("auth-state-change", (event) => {
     button.textContent = "Mostra JSON";
 
     const jsonPanel = document.createElement("pre");
+    jsonPanel.id = "json-panel";
     jsonPanel.className = "json-panel";
     jsonPanel.hidden = true;
-    jsonPanel.setAttribute("aria-live", "polite");
 
     button.addEventListener("click", () => {
       jsonPanel.textContent = JSON.stringify({
         status: "ok",
         message: "Login completato con successo",
         user: {
-          name,
+          name: userName,
           authenticated: true
         }
       }, null, 2);
@@ -185,4 +152,7 @@ window.addEventListener("auth-state-change", (event) => {
   welcomeContent.innerHTML = "";
 });
 
-document.addEventListener("DOMContentLoaded", loadWelcomeGif);
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadWelcomeGifSetting();
+  loadWelcomeGif();
+});
